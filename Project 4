@@ -1,0 +1,462 @@
+{
+  "nbformat": 4,
+  "nbformat_minor": 0,
+  "metadata": {
+    "colab": {
+      "provenance": [],
+      "authorship_tag": "ABX9TyPMPWu5AGTMlCnI9d6iKq7w",
+      "include_colab_link": true
+    },
+    "kernelspec": {
+      "name": "python3",
+      "display_name": "Python 3"
+    },
+    "language_info": {
+      "name": "python"
+    }
+  },
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "view-in-github",
+        "colab_type": "text"
+      },
+      "source": [
+        "<a href=\"https://colab.research.google.com/github/m0nkeybus1ness/AlvinShivere_ML_Portfolio/blob/main/Project%204\" target=\"_parent\"><img src=\"https://colab.research.google.com/assets/colab-badge.svg\" alt=\"Open In Colab\"/></a>"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "Alvin Shivere\n",
+        "\n",
+        "3/8/2026\n",
+        "\n",
+        "Source: sklearn inbuilt database"
+      ],
+      "metadata": {
+        "id": "CFVa_sacEf24"
+      }
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "# 1. Dataset Selection"
+      ],
+      "metadata": {
+        "id": "2O6A24MDEuu-"
+      }
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "hjWG3krLEHwQ"
+      },
+      "outputs": [],
+      "source": [
+        "from sklearn.datasets import load_iris\n",
+        "\n",
+        "# The target variable will be the class name.\n",
+        "# This dataset is ideal because the characteristics of each flower's petals can\n",
+        "# be used to classify the different flowers."
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "# 2. Setup and Reproducibility"
+      ],
+      "metadata": {
+        "id": "F9gc2JjyRIz6"
+      }
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "7FALbbDqlhIm",
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "outputId": "319de02d-d8df-4428-e4bf-ccf78e8df2de"
+      },
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "pandas: 2.2.2\n",
+            "numpy: 2.0.2\n",
+            "matplotlib: 3.10.0\n",
+            "sklearn: 1.6.1\n"
+          ]
+        }
+      ],
+      "source": [
+        "import pandas as pd\n",
+        "import numpy as np\n",
+        "import matplotlib\n",
+        "import sklearn\n",
+        "import random\n",
+        "\n",
+        "seed = 42\n",
+        "np.random.seed(seed)\n",
+        "random.seed(seed)\n",
+        "\n",
+        "print(\"pandas: \" + pd.__version__)\n",
+        "print(\"numpy: \" + np.__version__)\n",
+        "print(\"matplotlib: \" + matplotlib.__version__)\n",
+        "print(\"sklearn: \" + sklearn.__version__)\n",
+        "\n"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "# 3. Train a Basic Decision Tree"
+      ],
+      "metadata": {
+        "id": "V9HFH7AnHcml"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "from sklearn.tree import DecisionTreeClassifier\n",
+        "from sklearn.model_selection import train_test_split\n",
+        "from sklearn.metrics import accuracy_score, confusion_matrix, classification_report\n",
+        "\n",
+        "# Load the iris dataset\n",
+        "\n",
+        "iris = load_iris (as_frame=True)\n",
+        "X = iris.data[[\"petal length (cm)\", \"petal width (cm)\"]].values\n",
+        "y = iris.target\n",
+        "\n",
+        "# Define test train split\n",
+        "X_train, X_test, y_train, y_test = train_test_split(\n",
+        "    X, y, test_size=0.2, random_state=42\n",
+        ")\n",
+        "\n",
+        "# Fitting the model\n",
+        "tree_clf = DecisionTreeClassifier(random_state=42)\n",
+        "tree_clf.fit(X_train, y_train)\n",
+        "\n",
+        "# Making predictions\n",
+        "y_pred = tree_clf.predict(X_test)\n",
+        "\n",
+        "# Reporting accuracy\n",
+        "accuracy = accuracy_score(y_test, y_pred)\n",
+        "print(\"Accuracy:\", accuracy)\n",
+        "\n",
+        "# Displaying confusion matrix and classification report\n",
+        "conf_matrix = confusion_matrix(y_test, y_pred)\n",
+        "class_report = classification_report(y_test, y_pred)\n",
+        "\n",
+        "print(\"Confusion Matrix:\")\n",
+        "print(conf_matrix)\n",
+        "\n",
+        "print(\"Classification Report:\")\n",
+        "print(class_report)\n",
+        "\n"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "cVV_V3EtHjex",
+        "outputId": "6de726fb-17b6-437e-d08f-57f6d768824a"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Accuracy: 1.0\n",
+            "Confusion Matrix:\n",
+            "[[10  0  0]\n",
+            " [ 0  9  0]\n",
+            " [ 0  0 11]]\n",
+            "Classification Report:\n",
+            "              precision    recall  f1-score   support\n",
+            "\n",
+            "           0       1.00      1.00      1.00        10\n",
+            "           1       1.00      1.00      1.00         9\n",
+            "           2       1.00      1.00      1.00        11\n",
+            "\n",
+            "    accuracy                           1.00        30\n",
+            "   macro avg       1.00      1.00      1.00        30\n",
+            "weighted avg       1.00      1.00      1.00        30\n",
+            "\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "# 4. Visualize the Tree"
+      ],
+      "metadata": {
+        "id": "8RmQyjPgOrXn"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "from sklearn.tree import export_graphviz\n",
+        "from graphviz import Source\n",
+        "\n",
+        "# Export the decision tree to a DOT file\n",
+        "\n",
+        "export_graphviz(\n",
+        "    tree_clf,\n",
+        "    out_file=\"iris_tree.dot\",\n",
+        "    feature_names=iris.feature_names[2:],\n",
+        "    class_names=iris.target_names,\n",
+        "    rounded=True,\n",
+        "    filled=True\n",
+        ")\n",
+        "\n",
+        "# Displaying the file\n",
+        "Source.from_file(\"iris_tree.dot\")\n"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 1000
+        },
+        "id": "9OmbHOgbPLeO",
+        "outputId": "93eea0e4-43ba-4247-8658-ab024d34bc43"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "image/svg+xml": "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\"\n \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">\n<!-- Generated by graphviz version 2.43.0 (0)\n -->\n<!-- Title: Tree Pages: 1 -->\n<svg width=\"743pt\" height=\"790pt\"\n viewBox=\"0.00 0.00 743.00 790.00\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">\n<g id=\"graph0\" class=\"graph\" transform=\"scale(1 1) rotate(0) translate(4 786)\">\n<title>Tree</title>\n<polygon fill=\"white\" stroke=\"transparent\" points=\"-4,4 -4,-786 739,-786 739,4 -4,4\"/>\n<!-- 0 -->\n<g id=\"node1\" class=\"node\">\n<title>0</title>\n<path fill=\"#fdfffd\" stroke=\"black\" d=\"M270.5,-782C270.5,-782 126.5,-782 126.5,-782 120.5,-782 114.5,-776 114.5,-770 114.5,-770 114.5,-711 114.5,-711 114.5,-705 120.5,-699 126.5,-699 126.5,-699 270.5,-699 270.5,-699 276.5,-699 282.5,-705 282.5,-711 282.5,-711 282.5,-770 282.5,-770 282.5,-776 276.5,-782 270.5,-782\"/>\n<text text-anchor=\"middle\" x=\"198.5\" y=\"-766.8\" font-family=\"Helvetica,sans-Serif\" font-size=\"14.00\">petal length (cm) &lt;= 2.45</text>\n<text text-anchor=\"middle\" x=\"198.5\" y=\"-751.8\" font-family=\"Helvetica,sans-Serif\" font-size=\"14.00\">gini = 0.667</text>\n<text text-anchor=\"middle\" x=\"198.5\" y=\"-736.8\" font-family=\"Helvetica,sans-Serif\" font-size=\"14.00\">samples = 120</text>\n<text text-anchor=\"middle\" x=\"198.5\" y=\"-721.8\" font-family=\"Helvetica,sans-Serif\" font-size=\"14.00\">value = [40, 41, 39]</text>\n<text text-anchor=\"middle\" x=\"198.5\" y=\"-706.8\" font-family=\"Helvetica,sans-Serif\" font-size=\"14.00\">class = versicolor</text>\n</g>\n<!-- 1 -->\n<g id=\"node2\" class=\"node\">\n<title>1</title>\n<path fill=\"#e58139\" stroke=\"black\" d=\"M165,-655.5C165,-655.5 72,-655.5 72,-655.5 66,-655.5 60,-649.5 60,-643.5 60,-643.5 60,-599.5 60,-599.5 60,-593.5 66,-587.5 72,-587.5 72,-587.5 165,-587.5 165,-587.5 171,-587.5 177,-593.5 177,-599.5 177,-599.5 177,-643.5 177,-643.5 177,-649.5 171,-655.5 165,-655.5\"/>\n<text text-anchor=\"middle\" x=\"118.5\" y=\"-640.3\" font-family=\"Helvetica,sans-Serif\" font-size=\"14.00\">gini = 0.0</text>\n<text text-anchor=\"middle\" x=\"118.5\" y=\"-625.3\" font-family=\"Helvetica,sans-Serif\" font-size=\"14.00\">samples = 40</text>\n<text text-anchor=\"middle\" x=\"118.5\" y=\"-610.3\" font-family=\"Helvetica,sans-Serif\" font-size=\"14.00\">value = [40, 0, 0]</text>\n<text text-anchor=\"middle\" x=\"118.5\" y=\"-595.3\" font-family=\"Helvetica,sans-Serif\" font-size=\"14.00\">class = setosa</text>\n</g>\n<!-- 0&#45;&gt;1 -->\n<g id=\"edge1\" class=\"edge\">\n<title>0&#45;&gt;1</title>\n<path fill=\"none\" stroke=\"black\" d=\"M170.74,-698.91C163.05,-687.65 154.68,-675.42 146.95,-664.11\"/>\n<polygon fill=\"black\" stroke=\"black\" points=\"149.71,-661.95 141.18,-655.67 143.93,-665.9 149.71,-661.95\"/>\n<text text-anchor=\"middle\" x=\"136.56\" y=\"-676.54\" font-family=\"Helvetica,sans-Serif\" font-size=\"14.00\">True</text>\n</g>\n<!-- 2 -->\n<g id=\"node3\" class=\"node\">\n<title>2</title>\n<path fill=\"#f5fef9\" stroke=\"black\" d=\"M351.5,-663C351.5,-663 207.5,-663 207.5,-663 201.5,-663 195.5,-657 195.5,-651 195.5,-651 195.5,-592 195.5,-592 195.5,-586 201.5,-580 207.5,-580 207.5,-580 351.5,-580 351.5,-580 357.5,-580 363.5,-586 363.5,-592 363.5,-592 363.5,-651 363.5,-651 363.5,-657 357.5,-663 351.5,-663\"/>\n<text text-anchor=\"middle\" x=\"279.5\" y=\"-647.8\" font-family=\"Helvetica,sans-Serif\" font-size=\"14.00\">petal length (cm) &lt;= 4.75</text>\n<text text-anchor=\"middle\" x=\"279.5\" y=\"-632.8\" font-family=\"Helvetica,sans-Serif\" font-size=\"14.00\">gini = 0.5</text>\n<text text-anchor=\"middle\" x=\"279.5\" y=\"-617.8\" font-family=\"Helvetica,sans-Serif\" font-size=\"14.00\">samples = 80</text>\n<text text-anchor=\"middle\" x=\"279.5\" y=\"-602.8\" font-family=\"Helvetica,sans-Serif\" font-size=\"14.00\">value = [0, 41, 39]</text>\n<text text-anchor=\"middle\" x=\"279.5\" y=\"-587.8\" font-family=\"Helvetica,sans-Serif\" font-size=\"14.00\">class = versicolor</text>\n</g>\n<!-- 0&#45;&gt;2 -->\n<g id=\"edge2\" class=\"edge\">\n<title>0&#45;&gt;2</title>\n<path fill=\"none\" stroke=\"black\" d=\"M226.6,-698.91C232.76,-690.01 239.34,-680.51 245.69,-671.33\"/>\n<polygon fill=\"black\" stroke=\"black\" points=\"248.63,-673.24 251.45,-663.02 242.88,-669.25 248.63,-673.24\"/>\n<text text-anchor=\"middle\" x=\"255.92\" y=\"-683.92\" font-family=\"Helvetica,sans-Serif\" font-size=\"14.00\">False</text>\n</g>\n<!-- 3 -->\n<g id=\"node4\" class=\"node\">\n<title>3</title>\n<path fill=\"#3ee684\" stroke=\"black\" d=\"M259,-544C259,-544 120,-544 120,-544 114,-544 108,-538 108,-532 108,-532 108,-473 108,-473 108,-467 114,-461 120,-461 120,-461 259,-461 259,-461 265,-461 271,-467 271,-473 271,-473 271,-532 271,-532 271,-538 265,-544 259,-544\"/>\n<text text-anchor=\"middle\" x=\"189.5\" y=\"-528.8\" font-family=\"Helvetica,sans-Serif\" font-size=\"14.00\">petal width (cm) &lt;= 1.65</text>\n<text text-anchor=\"middle\" x=\"189.5\" y=\"-513.8\" font-family=\"Helvetica,sans-Serif\" font-size=\"14.00\">gini = 0.053</text>\n<text text-anchor=\"middle\" x=\"189.5\" y=\"-498.8\" font-family=\"Helvetica,sans-Serif\" font-size=\"14.00\">samples = 37</text>\n<text text-anchor=\"middle\" x=\"189.5\" y=\"-483.8\" font-family=\"Helvetica,sans-Serif\" font-size=\"14.00\">value = [0, 36, 1]</text>\n<text text-anchor=\"middle\" x=\"189.5\" y=\"-468.8\" font-family=\"Helvetica,sans-Serif\" font-size=\"14.00\">class = versicolor</text>\n</g>\n<!-- 2&#45;&gt;3 -->\n<g id=\"edge3\" class=\"edge\">\n<title>2&#45;&gt;3</title>\n<path fill=\"none\" stroke=\"black\" d=\"M248.27,-579.91C241.36,-570.92 233.97,-561.32 226.85,-552.05\"/>\n<polygon fill=\"black\" stroke=\"black\" points=\"229.54,-549.81 220.67,-544.02 223.99,-554.08 229.54,-549.81\"/>\n</g>\n<!-- 6 -->\n<g id=\"node7\" class=\"node\">\n<title>6</title>\n<path fill=\"#9253e8\" stroke=\"black\" d=\"M440,-544C440,-544 301,-544 301,-544 295,-544 289,-538 289,-532 289,-532 289,-473 289,-473 289,-467 295,-461 301,-461 301,-461 440,-461 440,-461 446,-461 452,-467 452,-473 452,-473 452,-532 452,-532 452,-538 446,-544 440,-544\"/>\n<text text-anchor=\"middle\" x=\"370.5\" y=\"-528.8\" font-family=\"Helvetica,sans-Serif\" font-size=\"14.00\">petal width (cm) &lt;= 1.75</text>\n<text text-anchor=\"middle\" x=\"370.5\" y=\"-513.8\" font-family=\"Helvetica,sans-Serif\" font-size=\"14.00\">gini = 0.206</text>\n<text text-anchor=\"middle\" x=\"370.5\" y=\"-498.8\" font-family=\"Helvetica,sans-Serif\" font-size=\"14.00\">samples = 43</text>\n<text text-anchor=\"middle\" x=\"370.5\" y=\"-483.8\" font-family=\"Helvetica,sans-Serif\" font-size=\"14.00\">value = [0, 5, 38]</text>\n<text text-anchor=\"middle\" x=\"370.5\" y=\"-468.8\" font-family=\"Helvetica,sans-Serif\" font-size=\"14.00\">class = virginica</text>\n</g>\n<!-- 2&#45;&gt;6 -->\n<g id=\"edge6\" class=\"edge\">\n<title>2&#45;&gt;6</title>\n<path fill=\"none\" stroke=\"black\" d=\"M311.07,-579.91C318.06,-570.92 325.53,-561.32 332.74,-552.05\"/>\n<polygon fill=\"black\" stroke=\"black\" points=\"335.61,-554.06 338.98,-544.02 330.08,-549.77 335.61,-554.06\"/>\n</g>\n<!-- 4 -->\n<g id=\"node5\" class=\"node\">\n<title>4</title>\n<path fill=\"#39e581\" stroke=\"black\" d=\"M109,-417.5C109,-417.5 12,-417.5 12,-417.5 6,-417.5 0,-411.5 0,-405.5 0,-405.5 0,-361.5 0,-361.5 0,-355.5 6,-349.5 12,-349.5 12,-349.5 109,-349.5 109,-349.5 115,-349.5 121,-355.5 121,-361.5 121,-361.5 121,-405.5 121,-405.5 121,-411.5 115,-417.5 109,-417.5\"/>\n<text text-anchor=\"middle\" x=\"60.5\" y=\"-402.3\" font-family=\"Helvetica,sans-Serif\" font-size=\"14.00\">gini = 0.0</text>\n<text text-anchor=\"middle\" x=\"60.5\" y=\"-387.3\" font-family=\"Helvetica,sans-Serif\" font-size=\"14.00\">samples = 36</text>\n<text text-anchor=\"middle\" x=\"60.5\" y=\"-372.3\" font-family=\"Helvetica,sans-Serif\" font-size=\"14.00\">value = [0, 36, 0]</text>\n<text text-anchor=\"middle\" x=\"60.5\" y=\"-357.3\" font-family=\"Helvetica,sans-Serif\" font-size=\"14.00\">class = versicolor</text>\n</g>\n<!-- 3&#45;&gt;4 -->\n<g id=\"edge4\" class=\"edge\">\n<title>3&#45;&gt;4</title>\n<path fill=\"none\" stroke=\"black\" d=\"M144.74,-460.91C131.73,-449.1 117.52,-436.22 104.55,-424.45\"/>\n<polygon fill=\"black\" stroke=\"black\" points=\"106.83,-421.79 97.07,-417.67 102.12,-426.98 106.83,-421.79\"/>\n</g>\n<!-- 5 -->\n<g id=\"node6\" class=\"node\">\n<title>5</title>\n<path fill=\"#8139e5\" stroke=\"black\" d=\"M240,-417.5C240,-417.5 151,-417.5 151,-417.5 145,-417.5 139,-411.5 139,-405.5 139,-405.5 139,-361.5 139,-361.5 139,-355.5 145,-349.5 151,-349.5 151,-349.5 240,-349.5 240,-349.5 246,-349.5 252,-355.5 252,-361.5 252,-361.5 252,-405.5 252,-405.5 252,-411.5 246,-417.5 240,-417.5\"/>\n<text text-anchor=\"middle\" x=\"195.5\" y=\"-402.3\" font-family=\"Helvetica,sans-Serif\" font-size=\"14.00\">gini = 0.0</text>\n<text text-anchor=\"middle\" x=\"195.5\" y=\"-387.3\" font-family=\"Helvetica,sans-Serif\" font-size=\"14.00\">samples = 1</text>\n<text text-anchor=\"middle\" x=\"195.5\" y=\"-372.3\" font-family=\"Helvetica,sans-Serif\" font-size=\"14.00\">value = [0, 0, 1]</text>\n<text text-anchor=\"middle\" x=\"195.5\" y=\"-357.3\" font-family=\"Helvetica,sans-Serif\" font-size=\"14.00\">class = virginica</text>\n</g>\n<!-- 3&#45;&gt;5 -->\n<g id=\"edge5\" class=\"edge\">\n<title>3&#45;&gt;5</title>\n<path fill=\"none\" stroke=\"black\" d=\"M191.58,-460.91C192.13,-450.2 192.72,-438.62 193.28,-427.78\"/>\n<polygon fill=\"black\" stroke=\"black\" points=\"196.78,-427.83 193.8,-417.67 189.79,-427.47 196.78,-427.83\"/>\n</g>\n<!-- 7 -->\n<g id=\"node8\" class=\"node\">\n<title>7</title>\n<path fill=\"#ffffff\" stroke=\"black\" d=\"M437.5,-425C437.5,-425 293.5,-425 293.5,-425 287.5,-425 281.5,-419 281.5,-413 281.5,-413 281.5,-354 281.5,-354 281.5,-348 287.5,-342 293.5,-342 293.5,-342 437.5,-342 437.5,-342 443.5,-342 449.5,-348 449.5,-354 449.5,-354 449.5,-413 449.5,-413 449.5,-419 443.5,-425 437.5,-425\"/>\n<text text-anchor=\"middle\" x=\"365.5\" y=\"-409.8\" font-family=\"Helvetica,sans-Serif\" font-size=\"14.00\">petal length (cm) &lt;= 4.95</text>\n<text text-anchor=\"middle\" x=\"365.5\" y=\"-394.8\" font-family=\"Helvetica,sans-Serif\" font-size=\"14.00\">gini = 0.5</text>\n<text text-anchor=\"middle\" x=\"365.5\" y=\"-379.8\" font-family=\"Helvetica,sans-Serif\" font-size=\"14.00\">samples = 8</text>\n<text text-anchor=\"middle\" x=\"365.5\" y=\"-364.8\" font-family=\"Helvetica,sans-Serif\" font-size=\"14.00\">value = [0, 4, 4]</text>\n<text text-anchor=\"middle\" x=\"365.5\" y=\"-349.8\" font-family=\"Helvetica,sans-Serif\" font-size=\"14.00\">class = versicolor</text>\n</g>\n<!-- 6&#45;&gt;7 -->\n<g id=\"edge7\" class=\"edge\">\n<title>6&#45;&gt;7</title>\n<path fill=\"none\" stroke=\"black\" d=\"M368.77,-460.91C368.41,-452.56 368.03,-443.67 367.66,-435.02\"/>\n<polygon fill=\"black\" stroke=\"black\" points=\"371.16,-434.86 367.23,-425.02 364.16,-435.16 371.16,-434.86\"/>\n</g>\n<!-- 14 -->\n<g id=\"node15\" class=\"node\">\n<title>14</title>\n<path fill=\"#853fe6\" stroke=\"black\" d=\"M623.5,-425C623.5,-425 479.5,-425 479.5,-425 473.5,-425 467.5,-419 467.5,-413 467.5,-413 467.5,-354 467.5,-354 467.5,-348 473.5,-342 479.5,-342 479.5,-342 623.5,-342 623.5,-342 629.5,-342 635.5,-348 635.5,-354 635.5,-354 635.5,-413 635.5,-413 635.5,-419 629.5,-425 623.5,-425\"/>\n<text text-anchor=\"middle\" x=\"551.5\" y=\"-409.8\" font-family=\"Helvetica,sans-Serif\" font-size=\"14.00\">petal length (cm) &lt;= 4.85</text>\n<text text-anchor=\"middle\" x=\"551.5\" y=\"-394.8\" font-family=\"Helvetica,sans-Serif\" font-size=\"14.00\">gini = 0.056</text>\n<text text-anchor=\"middle\" x=\"551.5\" y=\"-379.8\" font-family=\"Helvetica,sans-Serif\" font-size=\"14.00\">samples = 35</text>\n<text text-anchor=\"middle\" x=\"551.5\" y=\"-364.8\" font-family=\"Helvetica,sans-Serif\" font-size=\"14.00\">value = [0, 1, 34]</text>\n<text text-anchor=\"middle\" x=\"551.5\" y=\"-349.8\" font-family=\"Helvetica,sans-Serif\" font-size=\"14.00\">class = virginica</text>\n</g>\n<!-- 6&#45;&gt;14 -->\n<g id=\"edge14\" class=\"edge\">\n<title>6&#45;&gt;14</title>\n<path fill=\"none\" stroke=\"black\" d=\"M433.3,-460.91C448.46,-451.11 464.77,-440.56 480.29,-430.53\"/>\n<polygon fill=\"black\" stroke=\"black\" points=\"482.32,-433.39 488.81,-425.02 478.52,-427.51 482.32,-433.39\"/>\n</g>\n<!-- 8 -->\n<g id=\"node9\" class=\"node\">\n<title>8</title>\n<path fill=\"#39e581\" stroke=\"black\" d=\"M261,-298.5C261,-298.5 164,-298.5 164,-298.5 158,-298.5 152,-292.5 152,-286.5 152,-286.5 152,-242.5 152,-242.5 152,-236.5 158,-230.5 164,-230.5 164,-230.5 261,-230.5 261,-230.5 267,-230.5 273,-236.5 273,-242.5 273,-242.5 273,-286.5 273,-286.5 273,-292.5 267,-298.5 261,-298.5\"/>\n<text text-anchor=\"middle\" x=\"212.5\" y=\"-283.3\" font-family=\"Helvetica,sans-Serif\" font-size=\"14.00\">gini = 0.0</text>\n<text text-anchor=\"middle\" x=\"212.5\" y=\"-268.3\" font-family=\"Helvetica,sans-Serif\" font-size=\"14.00\">samples = 2</text>\n<text text-anchor=\"middle\" x=\"212.5\" y=\"-253.3\" font-family=\"Helvetica,sans-Serif\" font-size=\"14.00\">value = [0, 2, 0]</text>\n<text text-anchor=\"middle\" x=\"212.5\" y=\"-238.3\" font-family=\"Helvetica,sans-Serif\" font-size=\"14.00\">class = versicolor</text>\n</g>\n<!-- 7&#45;&gt;8 -->\n<g id=\"edge8\" class=\"edge\">\n<title>7&#45;&gt;8</title>\n<path fill=\"none\" stroke=\"black\" d=\"M312.42,-341.91C296.69,-329.88 279.5,-316.73 263.88,-304.79\"/>\n<polygon fill=\"black\" stroke=\"black\" points=\"265.94,-301.96 255.87,-298.67 261.69,-307.52 265.94,-301.96\"/>\n</g>\n<!-- 9 -->\n<g id=\"node10\" class=\"node\">\n<title>9</title>\n<path fill=\"#c09cf2\" stroke=\"black\" d=\"M442,-306C442,-306 303,-306 303,-306 297,-306 291,-300 291,-294 291,-294 291,-235 291,-235 291,-229 297,-223 303,-223 303,-223 442,-223 442,-223 448,-223 454,-229 454,-235 454,-235 454,-294 454,-294 454,-300 448,-306 442,-306\"/>\n<text text-anchor=\"middle\" x=\"372.5\" y=\"-290.8\" font-family=\"Helvetica,sans-Serif\" font-size=\"14.00\">petal width (cm) &lt;= 1.55</text>\n<text text-anchor=\"middle\" x=\"372.5\" y=\"-275.8\" font-family=\"Helvetica,sans-Serif\" font-size=\"14.00\">gini = 0.444</text>\n<text text-anchor=\"middle\" x=\"372.5\" y=\"-260.8\" font-family=\"Helvetica,sans-Serif\" font-size=\"14.00\">samples = 6</text>\n<text text-anchor=\"middle\" x=\"372.5\" y=\"-245.8\" font-family=\"Helvetica,sans-Serif\" font-size=\"14.00\">value = [0, 2, 4]</text>\n<text text-anchor=\"middle\" x=\"372.5\" y=\"-230.8\" font-family=\"Helvetica,sans-Serif\" font-size=\"14.00\">class = virginica</text>\n</g>\n<!-- 7&#45;&gt;9 -->\n<g id=\"edge9\" class=\"edge\">\n<title>7&#45;&gt;9</title>\n<path fill=\"none\" stroke=\"black\" d=\"M367.93,-341.91C368.43,-333.56 368.96,-324.67 369.48,-316.02\"/>\n<polygon fill=\"black\" stroke=\"black\" points=\"372.97,-316.21 370.08,-306.02 365.98,-315.79 372.97,-316.21\"/>\n</g>\n<!-- 10 -->\n<g id=\"node11\" class=\"node\">\n<title>10</title>\n<path fill=\"#8139e5\" stroke=\"black\" d=\"M338,-179.5C338,-179.5 249,-179.5 249,-179.5 243,-179.5 237,-173.5 237,-167.5 237,-167.5 237,-123.5 237,-123.5 237,-117.5 243,-111.5 249,-111.5 249,-111.5 338,-111.5 338,-111.5 344,-111.5 350,-117.5 350,-123.5 350,-123.5 350,-167.5 350,-167.5 350,-173.5 344,-179.5 338,-179.5\"/>\n<text text-anchor=\"middle\" x=\"293.5\" y=\"-164.3\" font-family=\"Helvetica,sans-Serif\" font-size=\"14.00\">gini = 0.0</text>\n<text text-anchor=\"middle\" x=\"293.5\" y=\"-149.3\" font-family=\"Helvetica,sans-Serif\" font-size=\"14.00\">samples = 3</text>\n<text text-anchor=\"middle\" x=\"293.5\" y=\"-134.3\" font-family=\"Helvetica,sans-Serif\" font-size=\"14.00\">value = [0, 0, 3]</text>\n<text text-anchor=\"middle\" x=\"293.5\" y=\"-119.3\" font-family=\"Helvetica,sans-Serif\" font-size=\"14.00\">class = virginica</text>\n</g>\n<!-- 9&#45;&gt;10 -->\n<g id=\"edge10\" class=\"edge\">\n<title>9&#45;&gt;10</title>\n<path fill=\"none\" stroke=\"black\" d=\"M345.09,-222.91C337.49,-211.65 329.23,-199.42 321.59,-188.11\"/>\n<polygon fill=\"black\" stroke=\"black\" points=\"324.39,-186 315.89,-179.67 318.59,-189.91 324.39,-186\"/>\n</g>\n<!-- 11 -->\n<g id=\"node12\" class=\"node\">\n<title>11</title>\n<path fill=\"#9cf2c0\" stroke=\"black\" d=\"M524.5,-187C524.5,-187 380.5,-187 380.5,-187 374.5,-187 368.5,-181 368.5,-175 368.5,-175 368.5,-116 368.5,-116 368.5,-110 374.5,-104 380.5,-104 380.5,-104 524.5,-104 524.5,-104 530.5,-104 536.5,-110 536.5,-116 536.5,-116 536.5,-175 536.5,-175 536.5,-181 530.5,-187 524.5,-187\"/>\n<text text-anchor=\"middle\" x=\"452.5\" y=\"-171.8\" font-family=\"Helvetica,sans-Serif\" font-size=\"14.00\">petal length (cm) &lt;= 5.45</text>\n<text text-anchor=\"middle\" x=\"452.5\" y=\"-156.8\" font-family=\"Helvetica,sans-Serif\" font-size=\"14.00\">gini = 0.444</text>\n<text text-anchor=\"middle\" x=\"452.5\" y=\"-141.8\" font-family=\"Helvetica,sans-Serif\" font-size=\"14.00\">samples = 3</text>\n<text text-anchor=\"middle\" x=\"452.5\" y=\"-126.8\" font-family=\"Helvetica,sans-Serif\" font-size=\"14.00\">value = [0, 2, 1]</text>\n<text text-anchor=\"middle\" x=\"452.5\" y=\"-111.8\" font-family=\"Helvetica,sans-Serif\" font-size=\"14.00\">class = versicolor</text>\n</g>\n<!-- 9&#45;&gt;11 -->\n<g id=\"edge11\" class=\"edge\">\n<title>9&#45;&gt;11</title>\n<path fill=\"none\" stroke=\"black\" d=\"M400.26,-222.91C406.34,-214.01 412.84,-204.51 419.11,-195.33\"/>\n<polygon fill=\"black\" stroke=\"black\" points=\"422.04,-197.25 424.79,-187.02 416.26,-193.3 422.04,-197.25\"/>\n</g>\n<!-- 12 -->\n<g id=\"node13\" class=\"node\">\n<title>12</title>\n<path fill=\"#39e581\" stroke=\"black\" d=\"M433,-68C433,-68 336,-68 336,-68 330,-68 324,-62 324,-56 324,-56 324,-12 324,-12 324,-6 330,0 336,0 336,0 433,0 433,0 439,0 445,-6 445,-12 445,-12 445,-56 445,-56 445,-62 439,-68 433,-68\"/>\n<text text-anchor=\"middle\" x=\"384.5\" y=\"-52.8\" font-family=\"Helvetica,sans-Serif\" font-size=\"14.00\">gini = 0.0</text>\n<text text-anchor=\"middle\" x=\"384.5\" y=\"-37.8\" font-family=\"Helvetica,sans-Serif\" font-size=\"14.00\">samples = 2</text>\n<text text-anchor=\"middle\" x=\"384.5\" y=\"-22.8\" font-family=\"Helvetica,sans-Serif\" font-size=\"14.00\">value = [0, 2, 0]</text>\n<text text-anchor=\"middle\" x=\"384.5\" y=\"-7.8\" font-family=\"Helvetica,sans-Serif\" font-size=\"14.00\">class = versicolor</text>\n</g>\n<!-- 11&#45;&gt;12 -->\n<g id=\"edge12\" class=\"edge\">\n<title>11&#45;&gt;12</title>\n<path fill=\"none\" stroke=\"black\" d=\"M427.18,-103.73C421.74,-94.97 415.99,-85.7 410.52,-76.91\"/>\n<polygon fill=\"black\" stroke=\"black\" points=\"413.43,-74.95 405.18,-68.3 407.48,-78.64 413.43,-74.95\"/>\n</g>\n<!-- 13 -->\n<g id=\"node14\" class=\"node\">\n<title>13</title>\n<path fill=\"#8139e5\" stroke=\"black\" d=\"M564,-68C564,-68 475,-68 475,-68 469,-68 463,-62 463,-56 463,-56 463,-12 463,-12 463,-6 469,0 475,0 475,0 564,0 564,0 570,0 576,-6 576,-12 576,-12 576,-56 576,-56 576,-62 570,-68 564,-68\"/>\n<text text-anchor=\"middle\" x=\"519.5\" y=\"-52.8\" font-family=\"Helvetica,sans-Serif\" font-size=\"14.00\">gini = 0.0</text>\n<text text-anchor=\"middle\" x=\"519.5\" y=\"-37.8\" font-family=\"Helvetica,sans-Serif\" font-size=\"14.00\">samples = 1</text>\n<text text-anchor=\"middle\" x=\"519.5\" y=\"-22.8\" font-family=\"Helvetica,sans-Serif\" font-size=\"14.00\">value = [0, 0, 1]</text>\n<text text-anchor=\"middle\" x=\"519.5\" y=\"-7.8\" font-family=\"Helvetica,sans-Serif\" font-size=\"14.00\">class = virginica</text>\n</g>\n<!-- 11&#45;&gt;13 -->\n<g id=\"edge13\" class=\"edge\">\n<title>11&#45;&gt;13</title>\n<path fill=\"none\" stroke=\"black\" d=\"M477.45,-103.73C482.81,-94.97 488.48,-85.7 493.86,-76.91\"/>\n<polygon fill=\"black\" stroke=\"black\" points=\"496.89,-78.66 499.12,-68.3 490.92,-75 496.89,-78.66\"/>\n</g>\n<!-- 15 -->\n<g id=\"node16\" class=\"node\">\n<title>15</title>\n<path fill=\"#c09cf2\" stroke=\"black\" d=\"M588,-298.5C588,-298.5 499,-298.5 499,-298.5 493,-298.5 487,-292.5 487,-286.5 487,-286.5 487,-242.5 487,-242.5 487,-236.5 493,-230.5 499,-230.5 499,-230.5 588,-230.5 588,-230.5 594,-230.5 600,-236.5 600,-242.5 600,-242.5 600,-286.5 600,-286.5 600,-292.5 594,-298.5 588,-298.5\"/>\n<text text-anchor=\"middle\" x=\"543.5\" y=\"-283.3\" font-family=\"Helvetica,sans-Serif\" font-size=\"14.00\">gini = 0.444</text>\n<text text-anchor=\"middle\" x=\"543.5\" y=\"-268.3\" font-family=\"Helvetica,sans-Serif\" font-size=\"14.00\">samples = 3</text>\n<text text-anchor=\"middle\" x=\"543.5\" y=\"-253.3\" font-family=\"Helvetica,sans-Serif\" font-size=\"14.00\">value = [0, 1, 2]</text>\n<text text-anchor=\"middle\" x=\"543.5\" y=\"-238.3\" font-family=\"Helvetica,sans-Serif\" font-size=\"14.00\">class = virginica</text>\n</g>\n<!-- 14&#45;&gt;15 -->\n<g id=\"edge15\" class=\"edge\">\n<title>14&#45;&gt;15</title>\n<path fill=\"none\" stroke=\"black\" d=\"M548.72,-341.91C547.99,-331.2 547.2,-319.62 546.46,-308.78\"/>\n<polygon fill=\"black\" stroke=\"black\" points=\"549.94,-308.4 545.77,-298.67 542.96,-308.88 549.94,-308.4\"/>\n</g>\n<!-- 16 -->\n<g id=\"node17\" class=\"node\">\n<title>16</title>\n<path fill=\"#8139e5\" stroke=\"black\" d=\"M723,-298.5C723,-298.5 630,-298.5 630,-298.5 624,-298.5 618,-292.5 618,-286.5 618,-286.5 618,-242.5 618,-242.5 618,-236.5 624,-230.5 630,-230.5 630,-230.5 723,-230.5 723,-230.5 729,-230.5 735,-236.5 735,-242.5 735,-242.5 735,-286.5 735,-286.5 735,-292.5 729,-298.5 723,-298.5\"/>\n<text text-anchor=\"middle\" x=\"676.5\" y=\"-283.3\" font-family=\"Helvetica,sans-Serif\" font-size=\"14.00\">gini = 0.0</text>\n<text text-anchor=\"middle\" x=\"676.5\" y=\"-268.3\" font-family=\"Helvetica,sans-Serif\" font-size=\"14.00\">samples = 32</text>\n<text text-anchor=\"middle\" x=\"676.5\" y=\"-253.3\" font-family=\"Helvetica,sans-Serif\" font-size=\"14.00\">value = [0, 0, 32]</text>\n<text text-anchor=\"middle\" x=\"676.5\" y=\"-238.3\" font-family=\"Helvetica,sans-Serif\" font-size=\"14.00\">class = virginica</text>\n</g>\n<!-- 14&#45;&gt;16 -->\n<g id=\"edge16\" class=\"edge\">\n<title>14&#45;&gt;16</title>\n<path fill=\"none\" stroke=\"black\" d=\"M594.87,-341.91C607.36,-330.21 620.99,-317.46 633.47,-305.78\"/>\n<polygon fill=\"black\" stroke=\"black\" points=\"636.16,-308.06 641.07,-298.67 631.37,-302.95 636.16,-308.06\"/>\n</g>\n</g>\n</svg>\n",
+            "text/plain": [
+              "<graphviz.sources.Source at 0x7940afa314c0>"
+            ]
+          },
+          "metadata": {},
+          "execution_count": 9
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "# 5. Regularization and Overfitting"
+      ],
+      "metadata": {
+        "id": "kDxX6pbOQuat"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "# Test model 1\n",
+        "test_model = DecisionTreeClassifier(max_depth=2, random_state=42)\n",
+        "test_model.fit(X_train, y_train)\n",
+        "\n",
+        "# Making predictions\n",
+        "y_pred = test_model.predict(X_test)\n",
+        "\n",
+        "# Reporting accuracy\n",
+        "accuracy = accuracy_score(y_test, y_pred)\n",
+        "print(\"Accuracy:\", accuracy)\n",
+        "\n",
+        "# Displaying confusion matrix and classification report\n",
+        "conf_matrix = confusion_matrix(y_test, y_pred)\n",
+        "class_report = classification_report(y_test, y_pred)\n",
+        "\n",
+        "print(\"Confusion Matrix:\")\n",
+        "print(conf_matrix)\n",
+        "\n",
+        "print(\"Classification Report:\")\n",
+        "print(class_report)\n",
+        "\n",
+        "# Test model 2\n",
+        "test_model_1 = DecisionTreeClassifier(max_depth=2, min_samples_leaf=1, random_state=42)\n",
+        "test_model.fit(X_train, y_train)\n",
+        "\n",
+        "# Making predictions\n",
+        "y_pred = test_model.predict(X_test)\n",
+        "\n",
+        "# Reporting accuracy\n",
+        "accuracy = accuracy_score(y_test, y_pred)\n",
+        "print(\"Accuracy:\", accuracy)\n",
+        "\n",
+        "# Displaying confusion matrix and classification report\n",
+        "conf_matrix = confusion_matrix(y_test, y_pred)\n",
+        "class_report = classification_report(y_test, y_pred)\n",
+        "\n",
+        "print(\"Confusion Matrix:\")\n",
+        "print(conf_matrix)\n",
+        "\n",
+        "print(\"Classification Report:\")\n",
+        "print(class_report)"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "eFw3A55IQx4a",
+        "outputId": "79e7e56f-4e50-4cec-aa54-ee462a2b298f"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Accuracy: 0.9666666666666667\n",
+            "Confusion Matrix:\n",
+            "[[10  0  0]\n",
+            " [ 0  8  1]\n",
+            " [ 0  0 11]]\n",
+            "Classification Report:\n",
+            "              precision    recall  f1-score   support\n",
+            "\n",
+            "           0       1.00      1.00      1.00        10\n",
+            "           1       1.00      0.89      0.94         9\n",
+            "           2       0.92      1.00      0.96        11\n",
+            "\n",
+            "    accuracy                           0.97        30\n",
+            "   macro avg       0.97      0.96      0.97        30\n",
+            "weighted avg       0.97      0.97      0.97        30\n",
+            "\n",
+            "Accuracy: 0.9666666666666667\n",
+            "Confusion Matrix:\n",
+            "[[10  0  0]\n",
+            " [ 0  8  1]\n",
+            " [ 0  0 11]]\n",
+            "Classification Report:\n",
+            "              precision    recall  f1-score   support\n",
+            "\n",
+            "           0       1.00      1.00      1.00        10\n",
+            "           1       1.00      0.89      0.94         9\n",
+            "           2       0.92      1.00      0.96        11\n",
+            "\n",
+            "    accuracy                           0.97        30\n",
+            "   macro avg       0.97      0.96      0.97        30\n",
+            "weighted avg       0.97      0.97      0.97        30\n",
+            "\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "# Discussion\n",
+        "\n",
+        "The regularization decreased the accuracy of the model from 1.00 to 0.97 in both cases. However, this is better for reducing overfitting because in the first model the classifier is specifically tailor made for those specific values and its accuracy may seriously be affected if a bigger and more random test set is used. The other models are more generalized and therefore would perform better if a more varied and larger test set is used."
+      ],
+      "metadata": {
+        "id": "PwqmbpjeTNSu"
+      }
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "# 6. Feature Importance"
+      ],
+      "metadata": {
+        "id": "H3dQwk2dT-4k"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "importances = tree_clf.feature_importances_\n",
+        "feature_names = iris.feature_names[2:]\n",
+        "\n",
+        "print(\"Feature Importances:\")\n",
+        "for name, importance in zip(feature_names, importances):\n",
+        "    print(f\"{name}: {importance}\")\n",
+        "\n",
+        "# Plotting the feature importances\n",
+        "import matplotlib.pyplot as plt\n",
+        "\n",
+        "plt.bar(feature_names, importances)"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 499
+        },
+        "id": "CbQ8ljnrUHLj",
+        "outputId": "c3f3319a-6507-4016-a5d9-195c89920b50"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Feature Importances:\n",
+            "petal length (cm): 0.9215050039574352\n",
+            "petal width (cm): 0.07849499604256478\n"
+          ]
+        },
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "<BarContainer object of 2 artists>"
+            ]
+          },
+          "metadata": {},
+          "execution_count": 13
+        },
+        {
+          "output_type": "display_data",
+          "data": {
+            "text/plain": [
+              "<Figure size 640x480 with 1 Axes>"
+            ],
+            "image/png": "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jnX8ksP82uttAAAAahGfTQMAAKwiRgAAgFXECAAAsIoYwUVlZ2fL4XDo+++/r3QZh8Nx0bf3/y09++yziomJqda6Dz/8sKZMmVKzE/qFBx98UNOmTavVfQCXqirHvS8eeeQR9evX76LL9O7dW//3f/930WUWLlxY7fecmjhxooYOHVqtdatq7NixeuKJJ2p1H/UVMXKFuJSD+HJVkxH05ZdfauXKlXryySdrZHuVmTBhgl544QXP5y0BtelyOe5feeUVLVy40Kd1oqKilJmZWSP7z83N1SuvvKJnnnmmRrZXmdGjR+v111/XgQMHanU/9RExAkiaMWOG7r//fgUHB9fqfjp16qQ2bdrorbfeqtX9AJeTsLAwq1H02muvqWfPnrr22mtrdT/h4eFKTEzUrFmzanU/9RExUgf07t1bjz/+uB5//HGFhYUpPDxcEydO9PoUxNLSUo0ePVqtWrXS7373O8XFxSk7O1vSuVOuqampKiwslMPhkMPh0LPPPitJevPNN9W9e3eFhISoRYsWGjBggPLz8y9pvkeOHNEDDzygxo0bq2nTprr77rt16NAhz/fPn7J9+eWX1bJlS1111VUaPny4fvzxR88yx44dU9++fRUUFKTf//73Wrx4sdf/lKKioiRJ99xzjxwOh+fr8958801FRUUpLCxMDz74oIqLiyudb3l5ud577z0lJSV5jZeWlmrMmDGKjIyU0+lU27ZtNW/ePEk/n8ZevXq1unbtqqCgIP3xj39Ufn6+PvzwQ0VHRys0NFQDBgzQmTPenxablJSkJUuW+PhTxZXmcj7uR48erbvuusvzdWZmphwOh1atWuUZa9u2rV577TVJF16mKSkpUUpKioKDg9WyZcsLLl327t1b33zzjUaOHOmZ+/9avXq1oqOjFRwcrDvuuEPHjh276HyXLFlywfHtdrv14osvqm3btnI6nWrdurVeeOEFSdKhQ4fkcDj0zjvvqFevXgoKCtJNN92kvXv3asuWLerevbuCg4N155136vjx417b5fiuJoPLXkJCggkODjYjRowwu3fvNm+99ZZp1KiRmTNnjmeZwYMHm549e5p169aZffv2mZdeesk4nU6zd+9eU1paajIzM01oaKg5duyYOXbsmCkuLjbGGDNv3jyzcuVKs3//frNx40YTHx9v7rzzTs92P/nkEyPJnDp1qtL5STLLli0zxhhTVlZmoqOjzaOPPmq++uors3PnTjNgwADTvn17U1paaowxZuDAgSY0NNQMGzbM7Nq1y/z73/++4Pm4XC4TExNjNm3aZHJyckxCQoIJCgoy//znP40xxuTn5xtJZsGCBebYsWMmPz/fGGNMenq6CQ4ONvfee6/Zvn27WbdunWnRooUZP358pfPfunWrkWRyc3O9xh944AETGRlp3n//fbN//36zZs0as2TJEq+fy80332w2bNhgtm7datq2bWsSEhJMnz59zNatW826devMVVddZaZOneq13Q8//NAEBASYs2fPVjon4HI+7j/44AMTFhZmfvrpJ2OMMf369TPh4eFmzJgxxhhjvv32WyPJfP3118aYc8f83Xff7Vn/scceM61btzZr1qwxX331lbnrrrtMSEiIGTFihDHGmBMnTphrrrnGPP/88565G2PMggULTMOGDY3L5TJbtmwxOTk5Jjo62gwYMKDSn+OJEyeMw+EwmzZt8hp/+umnTZMmTczChQvNvn37zPr1683cuXONMcYcPHjQSDIdOnQwq1atMjt37jQ333yziY2NNb179/Y65ocNG+a13V27dhlJ5uDBg5XOCRciRuqAhIQEEx0dbdxut2dszJgxJjo62hhjzDfffGP8/f3N0aNHvda7/fbbzbhx44wx5w7isLCwX93Xli1bjCTPLy1fY+TNN9807du395praWmpCQoKMqtXrzbGnPvFdO2113p+kRljzP3332+Sk5ONMT8fzFu2bPF8/+uvvzaSPDHyy/2el56ebho1amSKioo8Y0899ZSJi4urdP7Lli0z/v7+XnPes2ePkWQ++uijCtc5/3NZs2aNZywjI8NIMvv37/eM/fWvfzWJiYle63755ZdGkjl06FClcwIu5+P+1KlTxs/Pz2zZssW43W7TtGlTk5GR4TnO3nrrLdOqVSvP8v8bI8XFxSYgIMC88847nu+fOHHCBAUFeWLEGGOuvfZar+P9/PORZPbt2+cZmzlzpomIiKj0uW3bts1IMocPH/aMFRUVGafT6YmPXzofI6+99ppn7O233zaSTFZWlmcsIyPDtG/f3mvdwsJCI8lkZ2dXOidciMs0dcTNN9/sdaoyPj5eX3/9tcrLy7V9+3aVl5erXbt2Cg4O9jzWrl2r/fv3X3S7OTk5SkpKUuvWrRUSEqKEhARJ597Wvzq+/PJL7du3TyEhIZ55NG3aVGfPnvWayw033CB/f3/P1y1btvScJt6zZ48aNGigbt26eb7ftm1bNWnSpEpziIqKUkhISIXbrsgPP/wgp9Pp9fP94osv5O/v7/l5VObGG2/0/DsiIkKNGjXSdddd5zX2y30HBQVJ0gWXb4BfulyP+8aNG6tLly7Kzs7W9u3bFRAQoKFDh2rbtm06ffq01q5dW+mxs3//fpWVlSkuLs4z1rRpU7Vv375K+27UqJHatGnj+boqx7ckBQYGesZ27dql0tJS3X777Rfd1y+Pb0nq3Lmz1xjHd83w+bNpcPk5ffq0/P39lZOT4/UHXtJFb8gsKSlRYmKiEhMTtWjRIjVr1kyHDx9WYmKiysrKqj2X2NhYLVq06ILvNWvWzPPvhg0ben3P4XDI7XZXa5+/5Ou2w8PDdebMGZWVlSkgIEDSz79QfNmXw+Go0r5PnjwpyfvnAfjK9nHfu3dvZWdny+l0KiEhQU2bNlV0dLQ2bNigtWvXatSoUdV+bhdT0TFmLvKpJuHh4ZKkU6dOeY656h7fFY1xfNcMYqSO+Oyzz7y+3rRpk66//nr5+/ura9euKi8vV35+vnr16lXh+gEBASovL/ca2717t06cOKGpU6cqMjJSkvT5559f0jy7deumpUuXqnnz5goNDa3WNtq3b6+ffvpJ27ZtU2xsrCRp3759OnXqlNdyDRs2vOA5Vcf59yXZuXOn59+dO3eW2+3W2rVr5XK5Lnkf/2vHjh265pprPL8kgcpczsd9QkKC5s+frwYNGuiOO+6QdC5Q3n77be3du1e9e/eucL02bdqoYcOG+uyzz9S6dWtJ50Jh7969XmdTKpp7dbRp00ahoaHauXOn2rVrJ0m6/vrrFRQUpKysLA0ePPiS9/G/duzYoYYNG+qGG26o0e3Wd1ymqSMOHz6stLQ07dmzR2+//bZmzJihESNGSJLatWunhx56SCkpKXr//fd18OBBbd68WRkZGVqxYoWkc5cuTp8+raysLBUUFOjMmTNq3bq1AgICNGPGDB04cEAffPCBJk+efEnzfOihhxQeHq67775b69ev18GDB5Wdna0nn3xS3377bZW20aFDB7lcLg0dOlSbN2/Wtm3bNHToUAUFBXmdso6KilJWVpZyc3MvCBVfNGvWTN26ddOGDRu8tj1w4EA9+uijWr58ued5vPPOO9Xez3nr169Xnz59Lnk7qP8u5+P+tttuU3Fxsf7zn/94wqN3795atGiRWrZs6fnD/0vBwcEaNGiQnnrqKX388cfasWOHHnnkEa9Pez8/93Xr1uno0aMqKCjweX7n+fn5yeVyeR3fgYGBGjNmjJ5++mm98cYb2r9/vzZt2uR5tdylWL9+vecVOKg6YqSOSElJ0Q8//KAePXpo+PDhGjFihNe7CS5YsEApKSkaNWqU2rdvr379+mnLli2e/3n07NlTw4YNU3Jyspo1a6YXX3xRzZo108KFC/Xuu++qY8eOmjp1ql5++eVLmmejRo20bt06tW7dWvfee6+io6M1aNAgnT171qczJW+88YYiIiJ022236Z577tGQIUMUEhLidd132rRp+uijjxQZGamuXbte0rwHDx58waWlWbNm6b777tPf/vY3dejQQUOGDFFJSckl7efs2bNavny5hgwZcknbwZXhcj7umzRpos6dO6tZs2bq0KGDpHOB4na7f/Veq5deekm9evVSUlKSXC6Xbr31Vs9Z0POef/55HTp0SG3atLnkSx6DBw/WkiVLvC6pTJw4UaNGjdKkSZMUHR2t5OTkS35bA+ncy4g5vn3nMBe72IbLQu/evRUTE1Nj70ZYF3377beKjIzUmjVrfvWms+r44Ycf1L59ey1dulTx8fE1vv3zZs2apWXLlum///1vre0D9QPHfc0xxiguLk4jR45U//79a20/H374oUaNGqWvvvpKDRpwF4Qv+GnhsvTxxx/r9OnT6ty5s44dO6ann35aUVFRuu2222plf0FBQXrjjTcu6XRwVTRs2FAzZsyo1X0A8OZwODRnzhxt3769VvdTUlKiBQsWECLVwE8Ml6Uff/xR48eP14EDBxQSEqKePXtq0aJFF9xJX5Mqu+GuJtX0zXIAqiYmJqbaH6JZVffdd1+tbr8+4zINAACwihtYAQCAVcQIAACwihgBAABWESMAAMAqYgQAAFhFjAAAAKuIEQAAYBUxAgAArCJGAACAVf8Pm2WR4IdMfEIAAAAASUVORK5CYII=\n"
+          },
+          "metadata": {}
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "# Discussion\n",
+        "\n",
+        "The most important feature is the petal length with a score of 0.92. This indicates that the tree mainly uses petal length to make a classification. This likely indicates that there is a bigger difference between the different petal lengths than there is between their widths."
+      ],
+      "metadata": {
+        "id": "vBmXRmQeZW7y"
+      }
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "# 8. Reflection\n",
+        "\n",
+        "Having experimented with the model, I learnt that the tree classifier is one of the easiest models to understand in terms of its functionality. It breaks into smaller trees based on different features of the dataset until it classifies everything successfully. However, if allowed to make as many branches as necessary, it can often result in overfitting which can make it poor at making predictions. To prevent that, we need to regularize which makes the model much better at making predictions when given new data. Feature importance is useful when determining how to split data, because the more important feature will lead to clearer splits in the data, which makes the model perform better and faster. Trees are more useful when explaining how a model works is important because of their simplicity, and also when the data being used is non-linear."
+      ],
+      "metadata": {
+        "id": "jQE12q1waByv"
+      }
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "# 9. AI Assistance Log\n",
+        "\n",
+        "I only used AI in this case to generate examples that I used as a reference when designing my code, but did not use it to generate any actual code. The only external assistance I got was the predictions that colab gives when writing code."
+      ],
+      "metadata": {
+        "id": "l_4MKarWc5v4"
+      }
+    }
+  ]
+}
