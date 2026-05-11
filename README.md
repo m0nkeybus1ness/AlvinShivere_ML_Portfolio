@@ -1,5 +1,6 @@
 # AlvinShivere_ML_Portfolio
 Author: Alvin Shivere
+
 This is a portfolio of all my machine learning projects that I have worked on
 
 # Projects
